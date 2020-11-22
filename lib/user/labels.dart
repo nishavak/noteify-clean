@@ -21,12 +21,10 @@ class _LabelsState extends State<Labels> {
         if (snapshot.hasData) {
           // if (snapshot.data.documents.isEmpty) {}
           snapshot.data.documents.forEach((label) => {
-                // children.add(
-                print(label.data['name']),
-                SimpleDialogOption(
+                children.add(SimpleDialogOption(
+                  onPressed: () {},
                   child: Text(label.data['name']),
-                )
-                // ),
+                )),
               });
         } else {
           return Loading();
