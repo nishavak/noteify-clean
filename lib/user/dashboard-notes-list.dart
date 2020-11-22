@@ -21,12 +21,17 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((note) => {
                 children.add(DashboardNote(
-                    author: note.data['author'],
-                    title: note.data['title'],
-                    content: note.data['content'],
-                    timestamp: note.data['timestamp']))
+                  author: note.data['author'],
+                  title: note.data['title'],
+                  content: note.data['content'],
+                  timestamp: note.data['timestamp'],
+                  labels: note.data['labels'],
+                )),
               });
+        } else {
+          return Container(child: Center(child: Text("No data")));
         }
+
         return ListView(
           children: children ?? [],
         );

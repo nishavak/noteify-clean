@@ -7,13 +7,17 @@ class DashboardNote extends StatefulWidget {
   final String title;
   final String content;
   final Timestamp timestamp;
+  final List labels;
 
-  DashboardNote({this.author, this.title, this.content, this.timestamp});
+  // DashboardNote({this.author, this.title, this.content, this.timestamp});
+  DashboardNote(
+      {this.author, this.title, this.content, this.timestamp, this.labels});
   @override
   _DashboardNoteState createState() => _DashboardNoteState();
 }
 
 class _DashboardNoteState extends State<DashboardNote> {
+  // final List<String> labels = widget.labels.toList();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,26 +53,11 @@ class _DashboardNoteState extends State<DashboardNote> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    Label(
-                      label: 'Label 1',
-                    ),
-                    Label(
-                      label: 'Label 2',
-                    ),
-                    Label(
-                      label: 'Label 3',
-                    ),
-                    Label(
-                      label: 'Label 4',
-                    ),
-                    Label(
-                      label: 'Label 5',
-                    ),
-                    Label(
-                      label: 'Label 6',
-                    ),
-                  ],
+                  children: widget.labels
+                      .map((e) => Label(
+                            label: e,
+                          ))
+                      .toList(),
                 ),
               ),
             ],
