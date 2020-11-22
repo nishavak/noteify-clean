@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:noteify/services/database.dart';
 import 'package:noteify/user/dashboard-note.dart';
-import 'package:provider/provider.dart';
 
 class DashboardNotesList extends StatefulWidget {
   @override
@@ -11,16 +10,27 @@ class DashboardNotesList extends StatefulWidget {
 class _DashboardNotesListState extends State<DashboardNotesList> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: [
-          DashboardNote(),
-          DashboardNote(),
-          DashboardNote(),
-          DashboardNote(),
-          DashboardNote(),
-        ],
-      ),
+    Future<void> getNotes() async {
+      return await DatabaseService().noteCollection.getDocuments();
+    }
+
+    return FutureBuilder(
+      future: getNotes(),
+      builder: (context, snapshot) {
+        List<DashboardNote> children = List<DashboardNote>();
+        if (snapshot.hasData) {
+          snapshot.data.documents.forEach((note) => {
+                children.add(DashboardNote(
+                    author: note.data['author'],
+                    title: note.data['title'],
+                    content: note.data['content'],
+                    timestamp: note.data['timestamp']))
+              });
+        }
+        return ListView(
+          children: children ?? [],
+        );
+      },
     );
   }
 }

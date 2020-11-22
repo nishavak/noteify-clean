@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Label extends StatelessWidget {
   final String label;
-  const Label({Key key, this.label}) : super(key: key);
+  const Label({Key key, this.label = 'Random Label'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:noteify/user/label.dart';
 
 class DashboardNote extends StatefulWidget {
+  final String author;
+  final String title;
+  final String content;
+  final Timestamp timestamp;
+
+  DashboardNote({this.author, this.title, this.content, this.timestamp});
   @override
   _DashboardNoteState createState() => _DashboardNoteState();
 }
@@ -10,6 +17,7 @@ class _DashboardNoteState extends State<DashboardNote> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 10),
       child: Card(
         shadowColor: Colors.black26,
         shape:
@@ -21,7 +29,7 @@ class _DashboardNoteState extends State<DashboardNote> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Home Card Header',
+                widget.title,
                 style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16.088),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
@@ -30,7 +38,7 @@ class _DashboardNoteState extends State<DashboardNote> {
                 // constraints: BoxConstraints(minHeight: 80),
                 margin: EdgeInsets.only(top: 11, bottom: 13),
                 child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                  widget.content,
                   style: TextStyle(
                     fontSize: 15.0,
                   ),
