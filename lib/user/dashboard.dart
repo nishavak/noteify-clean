@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:noteify/services/authentication.dart';
 import 'package:noteify/user/app-drawer.dart';
 import 'package:noteify/user/dashboard-notes-list.dart';
+import 'package:noteify/user/label.dart';
+import 'package:noteify/user/labels.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -12,6 +14,22 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final AuthenticationService _auth = AuthenticationService();
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
+  bool _sort = true;
+  Function sort() {
+    setState(() {
+      _sort = !_sort;
+    });
+    return null;
+  }
+
+  Future _showFilterModal() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Labels();
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +69,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         onPressed: () {
                           print('sort');
+                          sort();
                         }),
                   ),
                   Container(
@@ -66,6 +85,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         onPressed: () {
                           print('filter');
+                          _showFilterModal();
                         }),
                   ),
                 ],
@@ -84,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                         begin: Alignment.topCenter,
                         colors: [Colors.grey[100], Colors.white])),
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: DashboardNotesList(),
+                child: DashboardNotesList(sort: _sort),
               ),
             ),
           ],
