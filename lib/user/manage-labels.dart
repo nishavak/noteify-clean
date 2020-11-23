@@ -26,7 +26,10 @@ class _ManageLabelsState extends State<ManageLabels> {
     }
 
     Future<void> getLabels() async {
-      return await DatabaseService().labelCollection.getDocuments();
+      return await DatabaseService()
+          .labelCollection
+          .orderBy('name')
+          .getDocuments();
     }
 
     // Future<void> getLabels2() async {
