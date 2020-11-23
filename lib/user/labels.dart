@@ -45,17 +45,19 @@ class _LabelsState extends State<Labels> {
               ),
               RaisedButton.icon(
                   elevation: 1,
+                  color: Colors.indigo,
                   onPressed: () {
                     widget.refresh('');
                     Navigator.pop(context);
                   },
                   icon: Icon(
                     Icons.clear,
+                    color: Colors.white,
                     size: 20,
                   ),
                   label: Text(
                     'Clear',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   )),
               SizedBox(
                 height: 10,

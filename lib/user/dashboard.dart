@@ -10,6 +10,7 @@ import 'package:noteify/user/labels.dart';
 
 class Dashboard extends StatefulWidget {
   String label = '';
+  bool _sort = true;
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -19,10 +20,9 @@ class _DashboardState extends State<Dashboard> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   GlobalKey<ScaffoldState> _searchKey = GlobalKey();
 
-  bool _sort = true;
   Function sort() {
     setState(() {
-      _sort = !_sort;
+      widget._sort = !widget._sort;
     });
     return null;
   }
@@ -123,7 +123,9 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: widget._sort
+                                  ? Colors.grey[50]
+                                  : Colors.indigo[50],
                               borderRadius: BorderRadius.circular(10.0)),
                           child: IconButton(
                               color: Colors.grey[50],
@@ -139,15 +141,18 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: widget.label == ''
+                                  ? Colors.grey[50]
+                                  : Colors.indigo[50],
+                              // color: Colors.grey[50],
                               borderRadius: BorderRadius.circular(10.0)),
                           child: IconButton(
                               color: Colors.grey[50],
-                              icon: FaIcon(FontAwesomeIcons.filter,
-                                  size: 18,
-                                  color: widget.label == ''
-                                      ? Colors.black
-                                      : Colors.indigo),
+                              icon: FaIcon(
+                                FontAwesomeIcons.filter,
+                                size: 18,
+                                color: Colors.black,
+                              ),
                               onPressed: () {
                                 print('filter');
                                 _showFilterModal();
@@ -171,12 +176,12 @@ class _DashboardState extends State<Dashboard> {
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                 child: _searchBar
                     ? DashboardNotesList(
-                        sort: _sort,
+                        sort: widget._sort,
                         label: widget.label,
                         search: true,
                         query: query)
                     : DashboardNotesList(
-                        sort: _sort,
+                        sort: widget._sort,
                         label: widget.label,
                         search: false,
                         query: ''),

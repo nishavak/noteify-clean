@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.indigo,
-          // fontFamily: 'Inter',
+          fontFamily: 'Inter',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Wrapper(),
