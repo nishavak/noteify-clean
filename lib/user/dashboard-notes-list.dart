@@ -5,7 +5,10 @@ import 'package:noteify/user/dashboard-note.dart';
 
 class DashboardNotesList extends StatefulWidget {
   final bool sort;
-  DashboardNotesList({this.sort});
+  final String label;
+  final bool search;
+  final String query;
+  DashboardNotesList({this.sort, this.label, this.search, this.query});
   @override
   _DashboardNotesListState createState() => _DashboardNotesListState();
 }
@@ -15,11 +18,20 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
   Widget build(BuildContext context) {
     String sort = widget.sort ? 'title' : 'timestamp';
     Future<void> getNotes() async {
-      return await DatabaseService()
-          .noteCollection
-          .orderBy(sort)
-          .getDocuments();
-      // .where('trash', isEqualTo: false)
+      if (!widget.search) {
+        // ! list all
+        return await DatabaseService()
+            .noteCollection
+            .where('trash', isEqualTo: 0)
+            .orderBy(sort)
+            .getDocuments();
+      } else {
+        // ! search by query
+        return await DatabaseService()
+            .noteCollection
+            .where('title', isEqualTo: widget.query)
+            .getDocuments();
+      }
     }
 
     return FutureBuilder(
@@ -30,20 +42,38 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
           if (snapshot.data.documents.isEmpty) {
             return Container(
               child: Center(
-                  child: Text(
-                'No notes added',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              )),
+                  child: widget.search
+                      ? Text(
+                          'No notes found',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w400),
+                        )
+                      : Text(
+                          'No notes added',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w400),
+                        )),
             );
           }
+          // print(widget.label);
           snapshot.data.documents.forEach((note) => {
-                children.add(DashboardNote(
-                  author: note.data['author'],
-                  title: note.data['title'],
-                  content: note.data['content'],
-                  timestamp: note.data['timestamp'],
-                  labels: note.data['labels'],
-                )),
+                widget.label != ''
+                    ? (note.data['labels'].contains(widget.label)
+                        ? children.add(DashboardNote(
+                            author: note.data['author'],
+                            title: note.data['title'],
+                            content: note.data['content'],
+                            timestamp: note.data['timestamp'],
+                            labels: note.data['labels'],
+                          ))
+                        : null)
+                    : children.add(DashboardNote(
+                        author: note.data['author'],
+                        title: note.data['title'],
+                        content: note.data['content'],
+                        timestamp: note.data['timestamp'],
+                        labels: note.data['labels'],
+                      )),
               });
         } else {
           print('loading');

@@ -29,13 +29,15 @@ class _ManageLabelsState extends State<ManageLabels> {
       return await DatabaseService().labelCollection.getDocuments();
     }
 
-    Future<void> getLabels2() async {
-      QuerySnapshot res =
-          await DatabaseService().labelCollection.getDocuments();
-      res.documents.forEach((element) {
-        print(element.documentID);
-      });
-    }
+    // Future<void> getLabels2() async {
+    //   QuerySnapshot res =
+    //       await DatabaseService().labelCollection.getDocuments();
+    //   res.documents
+    //       .where((element) => element.data['labels'].contains(widget.label))
+    //       .forEach((element) {
+    //     print(element);
+    //   });
+    // }
 
     Future<void> deleteLabel(String id) async {
       return await DatabaseService().labelCollection.document(id).delete();
@@ -88,6 +90,7 @@ class _ManageLabelsState extends State<ManageLabels> {
                               await createLabel(s);
                               setState(() {});
                             },
+                            textCapitalization: TextCapitalization.sentences,
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 17,

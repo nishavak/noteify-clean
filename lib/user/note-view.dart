@@ -50,7 +50,7 @@ class _NoteViewState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.arguments);
+    // print(widget.arguments);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
