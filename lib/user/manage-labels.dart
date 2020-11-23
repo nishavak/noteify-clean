@@ -40,6 +40,7 @@ class _ManageLabelsState extends State<ManageLabels> {
     // }
 
     Future<void> deleteLabel(String id) async {
+      // ! delete from notes first.
       return await DatabaseService().labelCollection.document(id).delete();
     }
 
@@ -73,11 +74,12 @@ class _ManageLabelsState extends State<ManageLabels> {
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black87,
-                    fontWeight: FontWeight.w300,
+                    // fontWeight: FontWeight.w300,
                   ),
                 ),
               ),
               body: Container(
+                color: Colors.white,
                 child: Column(
                   children: [
                     Container(
@@ -122,6 +124,9 @@ class _ManageLabelsState extends State<ManageLabels> {
                           itemCount: labels.length,
                           itemBuilder: (context, index) {
                             return Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0)),
                               child: ListTile(
                                   title: Text('${labels[index].name}'),
                                   trailing: IconButton(

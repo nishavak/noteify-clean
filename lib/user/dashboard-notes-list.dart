@@ -22,7 +22,6 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
         // ! list all
         return await DatabaseService()
             .noteCollection
-            .where('trash', isEqualTo: 0)
             .orderBy(sort)
             .getDocuments();
       } else {
@@ -56,25 +55,27 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
             );
           }
           // print(widget.label);
-          snapshot.data.documents.forEach((note) => {
-                widget.label != ''
-                    ? (note.data['labels'].contains(widget.label)
-                        ? children.add(DashboardNote(
+          snapshot.data.documents
+              .where((note) => note.data['trash'] == 0)
+              .forEach((note) => {
+                    widget.label != ''
+                        ? (note.data['labels'].contains(widget.label)
+                            ? children.add(DashboardNote(
+                                author: note.data['author'],
+                                title: note.data['title'],
+                                content: note.data['content'],
+                                timestamp: note.data['timestamp'],
+                                labels: note.data['labels'],
+                              ))
+                            : null)
+                        : children.add(DashboardNote(
                             author: note.data['author'],
                             title: note.data['title'],
                             content: note.data['content'],
                             timestamp: note.data['timestamp'],
                             labels: note.data['labels'],
-                          ))
-                        : null)
-                    : children.add(DashboardNote(
-                        author: note.data['author'],
-                        title: note.data['title'],
-                        content: note.data['content'],
-                        timestamp: note.data['timestamp'],
-                        labels: note.data['labels'],
-                      )),
-              });
+                          )),
+                  });
         } else {
           print('loading');
           return Loading();

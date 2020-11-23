@@ -142,12 +142,12 @@ class _DashboardState extends State<Dashboard> {
                               color: Colors.grey[50],
                               borderRadius: BorderRadius.circular(10.0)),
                           child: IconButton(
-                              focusColor: Colors.grey[50],
-                              icon: FaIcon(
-                                FontAwesomeIcons.filter,
-                                size: 18,
-                                color: Colors.black,
-                              ),
+                              color: Colors.grey[50],
+                              icon: FaIcon(FontAwesomeIcons.filter,
+                                  size: 18,
+                                  color: widget.label == ''
+                                      ? Colors.black
+                                      : Colors.indigo),
                               onPressed: () {
                                 print('filter');
                                 _showFilterModal();
@@ -194,7 +194,7 @@ class _DashboardState extends State<Dashboard> {
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey[50],
+        // color: Colors.grey[50],
         // elevation: 20.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
