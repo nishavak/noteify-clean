@@ -19,6 +19,10 @@ class _TrashViewState extends State<TrashView> {
         .getDocuments();
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -108,6 +112,7 @@ class _TrashViewState extends State<TrashView> {
                 .where((note) => note['trash'] == 1)
                 .forEach((note) {
               trash_cards.add(TrashCard(
+                  refresh: refresh,
                   id: note.documentID,
                   title: note['title'],
                   content: note['content'],

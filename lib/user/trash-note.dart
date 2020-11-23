@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:noteify/routes/routes.dart';
+import 'package:noteify/services/database.dart';
 import 'package:noteify/user/label.dart';
 
 class TrashCard extends StatefulWidget {
   final String id;
   final String title;
   final String content;
-  // final List<Label> labels;
+  final Function refresh;
   final List<dynamic> labels;
 
   TrashCard({
+    this.refresh,
     this.id = '',
     this.title = 'Title',
     this.content = 'Content',
     this.labels,
   });
-  // TrashCard({this.id = '', this.title = 'Title', this.content = 'Content'});
-  // TrashCard({this.id, this.title, this.content, this.labels});
 
   @override
   _TrashCardState createState() => _TrashCardState();
 }
 
 class _TrashCardState extends State<TrashCard> {
+  Future<void> restore(String id) async {
+    return await DatabaseService().noteCollection.document(id).updateData({
+      'trash': 0,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -87,7 +93,11 @@ class _TrashCardState extends State<TrashCard> {
                           child: Container(
                             margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                             child: MaterialButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                print('restore');
+                                await restore(widget.id);
+                                widget.refresh();
+                              },
                               color: Colors.white,
                               child: Icon(
                                 Icons.restore_from_trash,
