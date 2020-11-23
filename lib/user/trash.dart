@@ -107,7 +107,11 @@ class _TrashViewState extends State<TrashView> {
             snapshot.data.documents
                 .where((note) => note['trash'] == 1)
                 .forEach((note) {
-              print(note.documentID);
+              trash_cards.add(TrashCard(
+                  id: note.documentID,
+                  title: note['title'],
+                  content: note['content'],
+                  labels: note['labels']));
             });
 
             return Scaffold(
@@ -136,11 +140,7 @@ class _TrashViewState extends State<TrashView> {
                 decoration: BoxDecoration(color: Colors.white),
                 child: SingleChildScrollView(
                   child: Column(
-                    children: [
-                      TrashCard(),
-                      TrashCard(),
-                      TrashCard(),
-                    ],
+                    children: trash_cards,
                   ),
                 ),
               ),

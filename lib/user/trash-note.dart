@@ -7,8 +7,15 @@ class TrashCard extends StatefulWidget {
   final String title;
   final String content;
   // final List<Label> labels;
+  final List<dynamic> labels;
 
-  TrashCard({this.id = '', this.title = 'Title', this.content = 'Content'});
+  TrashCard({
+    this.id = '',
+    this.title = 'Title',
+    this.content = 'Content',
+    this.labels,
+  });
+  // TrashCard({this.id = '', this.title = 'Title', this.content = 'Content'});
   // TrashCard({this.id, this.title, this.content, this.labels});
 
   @override
@@ -66,9 +73,11 @@ class _TrashCardState extends State<TrashCard> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: [
-                                Label(),
-                              ],
+                              children: widget.labels
+                                  .map((e) => Label(
+                                        label: e,
+                                      ))
+                                  .toList(),
                             ),
                           ),
                         ),
