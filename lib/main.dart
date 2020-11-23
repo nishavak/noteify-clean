@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noteify/models/user.dart';
+import 'package:noteify/routes/router.dart';
 import 'package:noteify/services/authentication.dart';
 import 'package:noteify/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Wrapper(),
+        onGenerateRoute: Router.generateRoute,
       ),
     );
   }

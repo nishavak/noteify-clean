@@ -19,7 +19,7 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
           .noteCollection
           .orderBy(sort)
           .getDocuments();
-      //  .where('labels', arrayContainsAny: ['Sci Fi'])
+      // .where('trash', isEqualTo: false)
     }
 
     return FutureBuilder(

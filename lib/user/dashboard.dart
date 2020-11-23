@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:noteify/routes/routes.dart';
 import 'package:noteify/services/authentication.dart';
 import 'package:noteify/user/app-drawer.dart';
 import 'package:noteify/user/dashboard-notes-list.dart';
-import 'package:noteify/user/label.dart';
 import 'package:noteify/user/labels.dart';
 
 class Dashboard extends StatefulWidget {
@@ -48,6 +48,7 @@ class _DashboardState extends State<Dashboard> {
       body: Container(
         color: Colors.white,
         height: double.infinity,
+        width: double.maxFinite,
         child: Column(
           children: [
             // ! Filter and sort buttons
@@ -113,6 +114,8 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('add note');
+          Navigator.pushNamed(context, Routes.note,
+              arguments: ['create a new note']);
         },
         child: Icon(Icons.add),
       ),
