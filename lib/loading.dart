@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Center(
-        child: SpinKitPouringHourglass(
+        child: SpinKitChasingDots(
           color: Colors.indigo,
         ),
       ),
