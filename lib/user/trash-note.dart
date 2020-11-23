@@ -6,9 +6,10 @@ class TrashCard extends StatefulWidget {
   final String id;
   final String title;
   final String content;
-  final List<String> labels;
+  // final List<Label> labels;
 
-  TrashCard({this.id, this.title, this.content, this.labels});
+  TrashCard({this.id = '', this.title = 'Title', this.content = 'Content'});
+  // TrashCard({this.id, this.title, this.content, this.labels});
 
   @override
   _TrashCardState createState() => _TrashCardState();
@@ -24,7 +25,8 @@ class _TrashCardState extends State<TrashCard> {
         padding: EdgeInsets.all(0),
         width: double.maxFinite,
         child: GestureDetector(
-          onTap: () => Navigator.pushNamed(context, Routes.note),
+          onTap: () => Navigator.pushNamed(context, Routes.note,
+              arguments: ['pass note.uid here from trash']),
           child: Card(
             shadowColor: Colors.black26,
             shape: RoundedRectangleBorder(
@@ -36,7 +38,7 @@ class _TrashCardState extends State<TrashCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.title ?? '',
+                    widget.title,
                     style: TextStyle(
                         fontWeight: FontWeight.w800, fontSize: 16.088),
                     overflow: TextOverflow.ellipsis,
@@ -45,7 +47,7 @@ class _TrashCardState extends State<TrashCard> {
                   Container(
                     margin: EdgeInsets.only(top: 11, bottom: 13),
                     child: Text(
-                      widget.content ?? '',
+                      widget.content,
                       style: TextStyle(
                         fontSize: 15.0,
                       ),
@@ -64,9 +66,9 @@ class _TrashCardState extends State<TrashCard> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children:
-                                  // widget.labels.map((e) => Text(e)).toList() ??
-                                  [],
+                              children: [
+                                Label(),
+                              ],
                             ),
                           ),
                         ),
