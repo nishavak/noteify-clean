@@ -42,6 +42,10 @@ class _DashboardState extends State<Dashboard> {
   String query = '';
   // String label = '';
 
+  Function pageRefresh() {
+    setState(() {});
+  }
+
   Function refresh(String label) {
     setState(() {
       widget.label = label;
@@ -227,11 +231,13 @@ class _DashboardState extends State<Dashboard> {
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                 child: _searchBar
                     ? DashboardNotesList(
+                        pageRefresh: pageRefresh,
                         sort: widget._sort,
                         label: widget.label,
                         search: true,
                         query: query)
                     : DashboardNotesList(
+                        pageRefresh: pageRefresh,
                         sort: widget._sort,
                         label: widget.label,
                         search: false,

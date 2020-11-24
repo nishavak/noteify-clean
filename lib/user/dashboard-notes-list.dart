@@ -10,7 +10,9 @@ class DashboardNotesList extends StatefulWidget {
   final String label;
   final bool search;
   final String query;
-  DashboardNotesList({this.sort, this.label, this.search, this.query});
+  final Function pageRefresh;
+  DashboardNotesList(
+      {this.pageRefresh, this.sort, this.label, this.search, this.query});
   @override
   _DashboardNotesListState createState() => _DashboardNotesListState();
 }
