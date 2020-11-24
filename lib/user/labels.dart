@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 class Labels extends StatefulWidget {
   final Function refresh;
-  Labels({this.refresh});
+  final String loc;
+  final String action;
+  Labels({this.refresh, this.loc = 'dashboard', this.action = 'add'});
   @override
   _LabelsState createState() => _LabelsState();
 }
@@ -31,7 +33,7 @@ class _LabelsState extends State<Labels> {
               .forEach((label) => {
                     children.add(SimpleDialogOption(
                       onPressed: () {
-                        widget.refresh(label.data['name']);
+                        widget.refresh(label.data['name'], widget.action);
                         Navigator.pop(context);
                       },
                       child: Text(label.data['name']),
@@ -44,27 +46,32 @@ class _LabelsState extends State<Labels> {
         return SimpleDialog(
           title: Center(
             child: Column(children: [
-              Text('Filter Label',
+              Text(
+                  widget.loc == 'dashboard'
+                      ? 'Filter label'
+                      : (widget.action == 'add' ? 'Add label' : 'Remove label'),
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(
                 height: 10,
               ),
-              RaisedButton.icon(
-                  elevation: 1,
-                  color: Colors.indigo,
-                  onPressed: () {
-                    widget.refresh('');
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  label: Text(
-                    'Clear',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  )),
+              widget.loc == 'dashboard'
+                  ? RaisedButton.icon(
+                      elevation: 1,
+                      color: Colors.indigo,
+                      onPressed: () {
+                        widget.refresh('', widget.action);
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      label: Text(
+                        'Clear',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ))
+                  : Container(),
               SizedBox(
                 height: 10,
               ),

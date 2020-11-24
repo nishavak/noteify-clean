@@ -6,6 +6,7 @@ import 'package:noteify/models/user.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/label.dart';
 import 'package:noteify/user/labels.dart';
+// import 'package:noteify/user/note-view-labels.dart';
 import 'package:provider/provider.dart';
 
 class NoteView extends StatefulWidget {
@@ -39,13 +40,14 @@ class _NoteViewState extends State<NoteView> {
                 title: Text('Add Label'),
                 onTap: () {
                   Navigator.pop(context);
-                  _showLabelModal();
+                  _showLabelModal('add');
                 },
               ),
               ListTile(
                 title: Text('Remove Label'),
                 onTap: () {
                   Navigator.pop(context);
+                  _showLabelModal('remove');
                   print('remove label');
                 },
               ),
@@ -54,17 +56,26 @@ class _NoteViewState extends State<NoteView> {
         });
   }
 
-  void refresh(String label) {
-    // widget.labels = List<String>.from(widget.labels);
-    widget.labels.add(label);
+  void refresh(String label, String action) {
+    if (action == 'remove') {
+      if (widget.labels.contains(label)) {
+        widget.labels.remove(label);
+      }
+    } else {
+      if (!widget.labels.contains(label)) {
+        widget.labels.add(label);
+      }
+    }
   }
 
-  Future _showLabelModal() async {
+  Future _showLabelModal(String action) async {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
           return Labels(
             refresh: refresh,
+            loc: 'note',
+            action: action,
           );
         });
   }
@@ -192,12 +203,8 @@ class _NoteViewState extends State<NoteView> {
                         scrollDirection: Axis.horizontal,
                         child: Container(
                           width: double.maxFinite,
-                          child: Row(
-                            children: widget.labels
-                                .map((e) => Label(
-                                      label: e,
-                                    ))
-                                .toList(),
+                          child: NoteViewLabels(
+                            labels: widget.labels,
                           ),
                         ),
                       )
@@ -582,5 +589,25 @@ class _NoteViewState extends State<NoteView> {
             }
           });
     }
+  }
+}
+
+class NoteViewLabels extends StatefulWidget {
+  final List<String> labels;
+  NoteViewLabels({this.labels});
+  @override
+  _NoteViewLabelsState createState() => _NoteViewLabelsState();
+}
+
+class _NoteViewLabelsState extends State<NoteViewLabels> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: widget.labels
+          .map((e) => Label(
+                label: e,
+              ))
+          .toList(),
+    );
   }
 }
