@@ -1,16 +1,17 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:file_picker/file_picker.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:noteify/loading.dart';
 import 'package:noteify/models/user.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/label.dart';
 import 'package:noteify/user/labels.dart';
-// import 'package:path/path.dart' as p;
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class NoteView extends StatefulWidget {
@@ -22,12 +23,60 @@ class NoteView extends StatefulWidget {
 }
 
 class _NoteViewState extends State<NoteView> {
-  String fileType = '';
+  String fileType = 'image';
   File file;
   String fileName = '';
-  String operationText = '';
-  bool isUploaded = true;
   String result = '';
+
+  Future<void> _uploadFile(File file, String filename) async {
+    StorageReference storageReference;
+
+    storageReference = FirebaseStorage.instance.ref().child("images/$filename");
+
+    final StorageUploadTask uploadTask = storageReference.putFile(file);
+    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    result = url;
+    Fluttertoast.showToast(
+        msg: 'Image added',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.indigo,
+        textColor: Colors.white,
+        fontSize: 16.0);
+    // setState(() {});
+    print("URL is $url");
+  }
+
+  Future filePicker(BuildContext context) async {
+    try {
+      file = await FilePicker.getFile(type: FileType.image);
+      setState(() {
+        fileName = p.basename(file.path);
+      });
+      print(fileName);
+      _uploadFile(file, fileName);
+    } on PlatformException catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sorry...'),
+              content: Text('Unsupported exception: $e'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
   void _showOptions(context) {
     showModalBottomSheet(
         context: context,
@@ -37,31 +86,8 @@ class _NoteViewState extends State<NoteView> {
               ListTile(
                 title: Text('Add Image'),
                 onTap: () {
-                  // Future<void> _uploadFile(File file, String filename) async {
-                  //   StorageReference storageReference;
-                  //   if (fileType == 'image') {
-                  //     storageReference = FirebaseStorage.instance
-                  //         .ref()
-                  //         .child("images/$filename");
-                  //   }
-                  //   final StorageUploadTask uploadTask =
-                  //       storageReference.putFile(file);
-                  //   final StorageTaskSnapshot downloadUrl =
-                  //       (await uploadTask.onComplete);
-                  //   final String url = (await downloadUrl.ref.getDownloadURL());
-                  //   print("URL is $url");
-                  // }
-
-                  // Future filePicker(BuildContext context) async {
-                  //   if (fileType == 'image') {
-                  //     file = await FilePicker.getFile(type: FileType.image);
-                  //     setState(() {
-                  //       fileName = p.basename(file.path);
-                  //     });
-                  //     print(fileName);
-                  //     _uploadFile(file, fileName);
-                  //   }
-
+                  filePicker(context);
+                  print('add image');
                   Navigator.pop(context);
                 },
               ),
@@ -122,6 +148,7 @@ class _NoteViewState extends State<NoteView> {
         'content': content,
         'author': uid,
         'trash': 0,
+        'image': result,
         'timestamp': Timestamp.now(),
         'labels': widget.labels,
       });
@@ -151,8 +178,12 @@ class _NoteViewState extends State<NoteView> {
       return await DatabaseService()
           .noteCollection
           .document(widget.arguments[1])
-          .updateData(
-              {'title': title, 'content': content, 'labels': widget.labels});
+          .updateData({
+        'title': title,
+        'content': content,
+        'labels': widget.labels,
+        'image': result,
+      });
     }
 
     Future<void> restoreNote() async {
@@ -288,6 +319,7 @@ class _NoteViewState extends State<NoteView> {
             if (snapshot.hasData) {
               title = snapshot.data['title'];
               content = snapshot.data['content'];
+              result = snapshot.data['image'] ?? '';
               widget.labels = List<String>.from(snapshot.data['labels']);
               return Scaffold(
                 appBar: AppBar(
@@ -392,7 +424,34 @@ class _NoteViewState extends State<NoteView> {
                                         .toList(),
                                   ),
                                 ),
-                              )
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              result != ''
+                                  ? Image.network(
+                                      result,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : Container(),
                             ],
                           ))),
                 ),
@@ -460,6 +519,7 @@ class _NoteViewState extends State<NoteView> {
             if (snapshot.hasData) {
               title = snapshot.data['title'];
               content = snapshot.data['content'];
+              result = snapshot.data['image'] ?? '';
               widget.labels = List<String>.from(snapshot.data['labels']);
               return Scaffold(
                 appBar: AppBar(
@@ -565,7 +625,34 @@ class _NoteViewState extends State<NoteView> {
                                         .toList(),
                                   ),
                                 ),
-                              )
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              result != ''
+                                  ? Image.network(
+                                      result,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : Container(),
                             ],
                           ))),
                 ),
