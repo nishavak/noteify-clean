@@ -4,6 +4,7 @@ import 'package:noteify/routes/routes.dart';
 import 'package:noteify/user/label.dart';
 
 class DashboardNote extends StatefulWidget {
+  final String id;
   final String author;
   final String title;
   final String content;
@@ -12,7 +13,12 @@ class DashboardNote extends StatefulWidget {
 
   // DashboardNote({this.author, this.title, this.content, this.timestamp});
   DashboardNote(
-      {this.author, this.title, this.content, this.timestamp, this.labels});
+      {this.id = '',
+      this.author,
+      this.title,
+      this.content,
+      this.timestamp,
+      this.labels});
   @override
   _DashboardNoteState createState() => _DashboardNoteState();
 }
@@ -22,10 +28,11 @@ class _DashboardNoteState extends State<DashboardNote> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         // goto specific uid note
-        Navigator.pushNamed(context, Routes.note,
-            arguments: ['pass note.uid here']);
+        await Navigator.pushNamed(context, Routes.note,
+            arguments: ['dashboard', widget.id]);
+        setState(() {});
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 10),

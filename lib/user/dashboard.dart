@@ -167,6 +167,31 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Container(
                           decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: IconButton(
+                              color: Colors.grey[50],
+                              icon: FaIcon(
+                                FontAwesomeIcons.sync,
+                                size: 18,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                // showToast();
+                                setState(() {});
+                                Fluttertoast.showToast(
+                                    msg: 'Refreshing',
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.indigo,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                print('refresh');
+                              }),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
                               color: widget.label == ''
                                   ? Colors.grey[50]
                                   : Colors.indigo[50],
@@ -217,10 +242,11 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           print('add note');
-          Navigator.pushNamed(context, Routes.note,
-              arguments: ['create a new note']);
+          await Navigator.pushNamed(context, Routes.note,
+              arguments: ['new', '']);
+          setState(() {});
         },
         child: Icon(Icons.add),
       ),

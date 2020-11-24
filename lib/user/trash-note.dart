@@ -36,8 +36,11 @@ class _TrashCardState extends State<TrashCard> {
       padding: EdgeInsets.all(0),
       width: double.maxFinite,
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, Routes.note,
-            arguments: ['pass note.uid here from trash']),
+        onTap: () async {
+          await Navigator.pushNamed(context, Routes.note,
+              arguments: ['trash', widget.id]);
+          widget.refresh();
+        },
         child: Card(
           shadowColor: Colors.black26,
           shape:

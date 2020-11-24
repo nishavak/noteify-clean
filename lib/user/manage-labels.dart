@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:noteify/loading.dart';
+import 'package:noteify/models/user.dart';
 import 'package:noteify/routes/routes.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/app-drawer.dart';
+import 'package:provider/provider.dart';
 
 class ManageLabels extends StatefulWidget {
   @override
@@ -21,8 +23,12 @@ class _ManageLabelsState extends State<ManageLabels> {
   GlobalKey<FormState> _createlabel = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+
     Future<void> createLabel(String name) async {
-      return await DatabaseService().labelCollection.add({'name': name});
+      return await DatabaseService()
+          .labelCollection
+          .add({'name': name, 'author': user.uid});
     }
 
     Future<void> getLabels() async {

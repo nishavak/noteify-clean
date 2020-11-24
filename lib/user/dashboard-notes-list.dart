@@ -28,7 +28,7 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
         // ! list all
         return await DatabaseService()
             .noteCollection
-            .orderBy(sort)
+            .orderBy(sort, descending: sort == 'timestamp')
             .getDocuments();
       } else {
         // ! search by query
@@ -68,6 +68,7 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
                     widget.label != ''
                         ? (note.data['labels'].contains(widget.label)
                             ? children.add(DashboardNote(
+                                id: note.documentID,
                                 author: note.data['author'],
                                 title: note.data['title'],
                                 content: note.data['content'],
@@ -76,6 +77,7 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
                               ))
                             : null)
                         : children.add(DashboardNote(
+                            id: note.documentID,
                             author: note.data['author'],
                             title: note.data['title'],
                             content: note.data['content'],

@@ -29,6 +29,7 @@ class _TrashViewState extends State<TrashView> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     final uid = user.uid;
+
     return FutureBuilder(
       future: getTrashNotes(),
       builder: (context, snapshot) {
