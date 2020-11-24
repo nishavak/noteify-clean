@@ -64,7 +64,9 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
                   (note.data['trash'] == 0) &&
                   (note.data['author'] == uid) &&
                   (widget.search
-                      ? note.data['title'].contains(widget.query)
+                      ? note.data['title']
+                          .toLowerCase()
+                          .contains(widget.query.toLowerCase())
                       : true))
               .forEach((note) => {
                     widget.label != ''
