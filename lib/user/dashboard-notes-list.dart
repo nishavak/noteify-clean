@@ -32,10 +32,8 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
             .getDocuments();
       } else {
         // ! search by query
-        return await DatabaseService()
-            .noteCollection
-            .where('title', isEqualTo: widget.query)
-            .getDocuments();
+        return await DatabaseService().noteCollection.getDocuments();
+        // .where('title', isEqualTo: widget.query)
       }
     }
 
@@ -63,7 +61,11 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
           // print(widget.label);
           snapshot.data.documents
               .where((note) =>
-                  (note.data['trash'] == 0) && (note.data['author'] == uid))
+                  (note.data['trash'] == 0) &&
+                  (note.data['author'] == uid) &&
+                  (widget.search
+                      ? note.data['title'].contains(widget.query)
+                      : true))
               .forEach((note) => {
                     widget.label != ''
                         ? (note.data['labels'].contains(widget.label)

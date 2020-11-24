@@ -42,6 +42,13 @@ class _NoteViewState extends State<NoteView> {
                   _showLabelModal();
                 },
               ),
+              ListTile(
+                title: Text('Remove Label'),
+                onTap: () {
+                  Navigator.pop(context);
+                  print('remove label');
+                },
+              ),
             ]),
           );
         });
