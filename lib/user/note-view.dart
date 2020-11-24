@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:file_picker/file_picker.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:noteify/loading.dart';
@@ -6,7 +10,7 @@ import 'package:noteify/models/user.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/label.dart';
 import 'package:noteify/user/labels.dart';
-// import 'package:noteify/user/note-view-labels.dart';
+// import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class NoteView extends StatefulWidget {
@@ -18,6 +22,12 @@ class NoteView extends StatefulWidget {
 }
 
 class _NoteViewState extends State<NoteView> {
+  String fileType = '';
+  File file;
+  String fileName = '';
+  String operationText = '';
+  bool isUploaded = true;
+  String result = '';
   void _showOptions(context) {
     showModalBottomSheet(
         context: context,
@@ -27,12 +37,31 @@ class _NoteViewState extends State<NoteView> {
               ListTile(
                 title: Text('Add Image'),
                 onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Add Audio'),
-                onTap: () {
+                  // Future<void> _uploadFile(File file, String filename) async {
+                  //   StorageReference storageReference;
+                  //   if (fileType == 'image') {
+                  //     storageReference = FirebaseStorage.instance
+                  //         .ref()
+                  //         .child("images/$filename");
+                  //   }
+                  //   final StorageUploadTask uploadTask =
+                  //       storageReference.putFile(file);
+                  //   final StorageTaskSnapshot downloadUrl =
+                  //       (await uploadTask.onComplete);
+                  //   final String url = (await downloadUrl.ref.getDownloadURL());
+                  //   print("URL is $url");
+                  // }
+
+                  // Future filePicker(BuildContext context) async {
+                  //   if (fileType == 'image') {
+                  //     file = await FilePicker.getFile(type: FileType.image);
+                  //     setState(() {
+                  //       fileName = p.basename(file.path);
+                  //     });
+                  //     print(fileName);
+                  //     _uploadFile(file, fileName);
+                  //   }
+
                   Navigator.pop(context);
                 },
               ),
