@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noteify/loading.dart';
+import 'package:noteify/models/user.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/dashboard-note.dart';
+import 'package:provider/provider.dart';
 
 class DashboardNotesList extends StatefulWidget {
   final bool sort;
@@ -16,6 +18,10 @@ class DashboardNotesList extends StatefulWidget {
 class _DashboardNotesListState extends State<DashboardNotesList> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    print(user.uid);
+    final String uid = user.uid;
+
     String sort = widget.sort ? 'title' : 'timestamp';
     Future<void> getNotes() async {
       if (!widget.search) {
@@ -56,7 +62,8 @@ class _DashboardNotesListState extends State<DashboardNotesList> {
           }
           // print(widget.label);
           snapshot.data.documents
-              .where((note) => note.data['trash'] == 0)
+              .where((note) =>
+                  (note.data['trash'] == 0) && (note.data['author'] == uid))
               .forEach((note) => {
                     widget.label != ''
                         ? (note.data['labels'].contains(widget.label)

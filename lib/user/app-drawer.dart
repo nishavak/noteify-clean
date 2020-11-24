@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noteify/authentication/login.dart';
 import 'package:noteify/routes/routes.dart';
 import 'package:noteify/services/authentication.dart';
 
@@ -36,6 +37,13 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
           ListTile(
             onTap: () async {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Login(),
+                ),
+                (route) => false,
+              );
               return await _auth.signOut();
             },
             title: Text('Sign out'),

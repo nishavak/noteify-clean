@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:noteify/models/user.dart';
 import 'package:noteify/routes/routes.dart';
 import 'package:noteify/services/authentication.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/app-drawer.dart';
 import 'package:noteify/user/dashboard-notes-list.dart';
 import 'package:noteify/user/labels.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   String label = '';
@@ -45,8 +48,21 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  void showToast() {
+    Fluttertoast.showToast(
+        msg: 'Sorted by ${widget._sort ? 'Title' : 'Recent'}',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.indigo,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // final user = Provider.of<User>(context);
+    // print(user.uid);
     return Scaffold(
       key: _drawerKey,
       appBar: AppBar(
@@ -135,6 +151,16 @@ class _DashboardState extends State<Dashboard> {
                                 color: Colors.black,
                               ),
                               onPressed: () {
+                                // showToast();
+                                Fluttertoast.showToast(
+                                    msg:
+                                        'Sorted by ${widget._sort ? 'Recents' : 'Title'}',
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.indigo,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
                                 print('sort');
                                 sort();
                               }),

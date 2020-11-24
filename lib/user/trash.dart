@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:noteify/loading.dart';
+import 'package:noteify/models/user.dart';
 import 'package:noteify/routes/routes.dart';
 import 'package:noteify/services/database.dart';
 import 'package:noteify/user/app-drawer.dart';
 import 'package:noteify/user/label.dart';
 import 'package:noteify/user/trash-note.dart';
+import 'package:provider/provider.dart';
 
 class TrashView extends StatefulWidget {
   @override
@@ -25,6 +27,8 @@ class _TrashViewState extends State<TrashView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    final uid = user.uid;
     return FutureBuilder(
       future: getTrashNotes(),
       builder: (context, snapshot) {
@@ -109,7 +113,8 @@ class _TrashViewState extends State<TrashView> {
             // return Text('hey');
             List<TrashCard> trash_cards = List<TrashCard>();
             snapshot.data.documents
-                .where((note) => note['trash'] == 1)
+                .where(
+                    (note) => (note['trash'] == 1) && (note['author'] == uid))
                 .forEach((note) {
               trash_cards.add(TrashCard(
                   refresh: refresh,
