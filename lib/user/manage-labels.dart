@@ -61,10 +61,12 @@ class _ManageLabelsState extends State<ManageLabels> {
           List<ManageLabelItem> labels = List<ManageLabelItem>();
           if (snapshot.hasData) {
             // print(snapshot.data.documents[0].id);
-            snapshot.data.documents.forEach((label) => {
-                  labels.add(ManageLabelItem(
-                      id: label.documentID, name: label['name']))
-                });
+            snapshot.data.documents
+                .where((label) => label['author'] == user.uid)
+                .forEach((label) => {
+                      labels.add(ManageLabelItem(
+                          id: label.documentID, name: label['name']))
+                    });
             return Scaffold(
               appBar: AppBar(
                 elevation: 0,

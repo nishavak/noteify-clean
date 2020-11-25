@@ -46,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
     setState(() {});
   }
 
-  Function refresh(String label) {
+  Function refresh(String label, String action) {
     setState(() {
       widget.label = label;
     });

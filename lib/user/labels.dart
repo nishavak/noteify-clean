@@ -55,29 +55,41 @@ class _LabelsState extends State<Labels> {
                 height: 10,
               ),
               widget.loc == 'dashboard'
-                  ? RaisedButton.icon(
-                      elevation: 1,
-                      color: Colors.indigo,
-                      onPressed: () {
-                        widget.refresh('', widget.action);
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      label: Text(
-                        'Clear',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ))
+                  ? (children.length != 0)
+                      ? RaisedButton.icon(
+                          elevation: 1,
+                          color: Colors.indigo,
+                          onPressed: () {
+                            widget.refresh('', widget.action);
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          label: Text(
+                            'Clear',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ))
+                      : Container()
                   : Container(),
               SizedBox(
                 height: 10,
               ),
             ]),
           ),
-          children: children,
+          children: children.length != 0
+              ? children
+              : [
+                  Center(
+                    child: Text(
+                      'No labels added',
+                      style: TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
         );
       },
     );
